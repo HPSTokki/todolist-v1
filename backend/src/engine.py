@@ -3,7 +3,7 @@ from fastapi import Depends
 from typing import Generator, Annotated
 from pathlib import Path
 
-BASE_PATH = Path(__file__).resolve()
+BASE_PATH = Path(__file__).resolve().parent.parent
 LOCAL_DB_PATH = BASE_PATH / "local.db"
 
 sqlite_url = f"sqlite:///{LOCAL_DB_PATH}"
