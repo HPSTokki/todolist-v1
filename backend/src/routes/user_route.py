@@ -1,5 +1,6 @@
-from fastapi import APIRouter
-from src.dto.todolist_dto import InsertUser, UpdateUser, ListResponseUser
+from fastapi import APIRouter, Depends
+from fastapi.security import OAuth2PasswordRequestForm
+from src.dto.todolist_dto import InsertUser, UpdateUser, ListResponseUser, Token
 from src.models.todolist_model import User
 from src.services.user_service import UserService
 from src.engine import SessionDep
@@ -19,3 +20,19 @@ def register_user(session: SessionDep, user_data: InsertUser):
     service = UserService(session)
     user = service.register_user(user_data)
     return user
+
+@router.post("/login", response_model=Token)
+def login(
+    session: SessionDep,
+    form_data: OAuth2PasswordRequestForm = Depends()
+):
+    service = UserService(session)
+    token = service.login(
+        form_data.username,
+        form_data.password
+    )
+
+    return {
+        "access_token": token,
+        "token_type": "bearer"
+    }

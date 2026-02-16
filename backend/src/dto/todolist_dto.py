@@ -50,3 +50,6 @@ class UpdateUser(BaseModel):
 class ListResponseUser(BaseModel):
     users: list[ResponseUser]
 
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "Bearer"
