@@ -21,5 +21,5 @@ class Task(SQLModel, table=True):
     title: str = Field(sa_type=String)
     description: str | None = Field(default=None, sa_type=String)
     due_date: datetime | None
-    isCompleted: bool = False
+    is_completed: bool = False
     created_at: datetime = Field(default_factory=datetime.utcnow)
