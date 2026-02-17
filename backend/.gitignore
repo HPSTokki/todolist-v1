@@ -1,15 +1,10 @@
-# Python-generated files
-__pycache__/
-*.py[oc]
-build/
-dist/
-wheels/
-*.egg-info
-
-# Virtual environments
+# Virtual Environment
 .venv
 
-# Alembic Generated Versions
+# Python Produced Files
+__pycache__
+
+
+# Alembic Versions
+
 alembic/versions
-
-

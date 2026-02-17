@@ -6,7 +6,7 @@ from sqlalchemy import pool
 from alembic import context
 
 from sqlmodel import SQLModel
-from src.models import todolist_model
+from src.models.todolist_models import *
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
