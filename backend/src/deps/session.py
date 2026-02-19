@@ -1,26 +1,20 @@
-from sqlmodel import create_engine
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
-from typing import Annotated, AsyncGenerator
+from sqlmodel import Session, create_engine
 from fastapi import Depends
+from typing import Annotated, Generator
 from pathlib import Path
 
 BASE_PATH = Path(__file__).resolve().parent.parent.parent
 LOCAL_DB_PATH = BASE_PATH / "local.db"
 
-SQLITE_URL = f"sqlite+aiosqlite:///{LOCAL_DB_PATH}"
+SQLITE_URL = f"sqlite:///{LOCAL_DB_PATH}"
 CONNECT_ARGS = {
     "check_same_thread": False
 }
 
-engine = create_async_engine(SQLITE_URL)
+engine = create_engine(url=SQLITE_URL, connect_args=CONNECT_ARGS)
 
-async_engine = sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False
-)
-
-async def get_session() -> AsyncGenerator[AsyncSession, None]:
-    async with async_engine() as session:
+def get_session() -> Generator[Session, None, None]:
+    with Session(engine) as session:
         yield session
-
-SessionDep = Annotated[AsyncSession, Depends(get_session)]
+        
+SessionDep = Annotated[Session, Depends(get_session)]
