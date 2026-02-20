@@ -6,9 +6,9 @@ class User(SQLModel, table=True):
     __tablename__ = "users"
     
     id: int = Field(default=None, primary_key=True)
-    email: str = Field(default=None, index=True)
-    password: str = Field(default=None)
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    email: str = Field(default=None, index=True, sa_type=String)
+    password: str = Field(default=None, sa_type=String)
+    created_at: datetime = Field(default_factory=datetime.now)
     
 class Task(SQLModel, table=True):
     __tablename__ = "tasks"
