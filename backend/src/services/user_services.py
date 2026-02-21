@@ -4,7 +4,7 @@ from fastapi import HTTPException, status
 from src.dto.todolist_dtos import InsertUser, ResponseUser, ListResponseUser
 from src.models.todolist_models import User
 from src.core.security import hash_password, verify_password
-
+from src.error import UserExistsError, UserDoesNotExistsError
 
 class UserService():
     def __init__(self, session: Session):
@@ -18,7 +18,7 @@ class UserService():
         result = self.session.exec(stmt).first()
                 
         if result:
-            raise HTTPException(status_code=status.HTTP_409_CONFLICT, detail="User Exists")
+            raise UserExistsError("User Exists")
         
         hashed_password = hash_password(user_data.password)        
         
@@ -29,3 +29,19 @@ class UserService():
         self.session.commit()
         self.session.refresh(new_user)
         return new_user
+    
+    def get_all_user(self) -> ListResponseUser:
+        stmt = select(User)
+        return self.session.exec(stmt).all()
+    
+    def get_one_user_by_id(self, user_id: int) -> User:
+        stmt = select(User).where(
+            User.id == user_id
+        )
+        
+        result = self.session.exec(stmt).first()
+        
+        if not result:
+            raise UserDoesNotExistsError("User doesn't exists")
+        
+        return result
